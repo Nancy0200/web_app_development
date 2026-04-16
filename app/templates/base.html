@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}天命閣・線上算命{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}天命閣提供生辰八字排盤、線上占卜等傳統命理服務，結合現代科技讓您隨時獲得命理指引。{% endblock %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- 背景星點裝飾 -->
+  <div class="stars" aria-hidden="true">
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+  </div>
+
+  <!-- 導覽列 -->
+  <nav class="navbar" role="navigation" aria-label="主要導覽">
+    <div class="nav-container">
+      <a href="{{ url_for('main.index') }}" class="nav-brand" aria-label="天命閣首頁">
+        <span class="brand-icon">☯</span>
+        <span class="brand-name">天命閣</span>
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="{{ url_for('main.index') }}" class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}">首頁</a></li>
+        <li><a href="{{ url_for('bazi.bazi_form') }}" class="nav-link {% if request.blueprint == 'bazi' %}active{% endif %}">八字算命</a></li>
+        <li><a href="{{ url_for('divination.divination_draw_page') }}" class="nav-link {% if request.blueprint == 'divination' %}active{% endif %}">線上占卜</a></li>
+        <li><a href="{{ url_for('main.history') }}" class="nav-link {% if request.endpoint == 'main.history' %}active{% endif %}">歷史紀錄</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Flash 訊息 -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container" role="alert" aria-live="polite">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="flash-close" onclick="this.parentElement.remove()" aria-label="關閉通知">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- 主要內容 -->
+  <main class="main-content" id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- 頁尾 -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-container">
+      <p class="footer-brand">☯ 天命閣</p>
+      <p class="footer-text">傳承千年命理智慧・指引現代人生方向</p>
+      <p class="footer-copy">&copy; 2026 天命閣 · 本站命理僅供參考，人生道路由心而定。</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

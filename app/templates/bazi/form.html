@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}八字排盤・輸入生辰資料 - 天命閣{% endblock %}
+{% block meta_description %}輸入您的出生年、月、日、時與性別，天命閣將為您推算生辰八字天干地支四柱與命格解析。{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+  <div class="page-header">
+    <span class="page-header-icon" aria-hidden="true">🀄</span>
+    <h1 class="page-title">生辰八字排盤</h1>
+    <p class="page-subtitle">請填寫您的出生資料，系統將推算您的天干地支四柱</p>
+  </div>
+
+  <div class="card">
+    <form id="bazi-form" method="POST" action="{{ url_for('bazi.bazi_calculate') }}" novalidate>
+
+      <!-- 出生年月日 -->
+      <fieldset style="border:none;padding:0;">
+        <legend style="color:var(--gold);font-family:var(--font-serif);font-size:1rem;margin-bottom:1.25rem;">📅 出生日期</legend>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="birth_year">出生年份 <span style="color:var(--red-accent)">*</span></label>
+            <input type="number" class="form-control" id="birth_year" name="birth_year"
+              min="1900" max="{{ current_year }}" placeholder="例：1990"
+              value="{{ request.form.get('birth_year', '') }}" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="birth_month">月份 <span style="color:var(--red-accent)">*</span></label>
+            <select class="form-control" id="birth_month" name="birth_month" required>
+              <option value="">-- 月 --</option>
+              {% for m in range(1, 13) %}
+                <option value="{{ m }}" {% if request.form.get('birth_month') == m|string %}selected{% endif %}>{{ m }} 月</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="birth_day">日期 <span style="color:var(--red-accent)">*</span></label>
+            <select class="form-control" id="birth_day" name="birth_day" required>
+              <option value="">-- 日 --</option>
+              {% for d in range(1, 32) %}
+                <option value="{{ d }}" {% if request.form.get('birth_day') == d|string %}selected{% endif %}>{{ d }} 日</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <hr class="divider" />
+
+      <!-- 出生時辰 -->
+      <div class="form-group">
+        <label class="form-label" for="birth_time">出生時辰（時）</label>
+        <select class="form-control" id="birth_time" name="birth_time">
+          <option value="">不詳 / 不填</option>
+          {% for h in range(0, 24) %}
+            <option value="{{ h }}" {% if request.form.get('birth_time') == h|string %}selected{% endif %}>
+              {{ "%02d"|format(h) }}:00 — {{ "%02d"|format(h) }}:59
+            </option>
+          {% endfor %}
+        </select>
+        <p class="form-hint">時辰影響時柱天干地支的準確性，如知曉建議填寫</p>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- 性別 -->
+      <div class="form-group">
+        <span class="form-label">性別 <span style="color:var(--red-accent)">*</span></span>
+        <div class="gender-group">
+          <div class="gender-option">
+            <input type="radio" id="gender-m" name="gender" value="M"
+              {% if request.form.get('gender') == 'M' or not request.form.get('gender') %}checked{% endif %} />
+            <label for="gender-m">♂ 男命</label>
+          </div>
+          <div class="gender-option">
+            <input type="radio" id="gender-f" name="gender" value="F"
+              {% if request.form.get('gender') == 'F' %}checked{% endif %} />
+            <label for="gender-f">♀ 女命</label>
+          </div>
+        </div>
+        <p class="form-hint">性別影響大運順逆行方向，請如實選擇</p>
+      </div>
+
+      <button type="submit" class="btn btn-gold btn-block" id="bazi-submit-btn">
+        ✦ 開始排盤解析
+      </button>
+    </form>
+  </div>
+
+  <p style="text-align:center;color:var(--text-muted);font-size:0.82rem;margin-top:1.5rem;">
+    ※ 本站命理解析依五行理論推算，僅供參考，人生抉擇仍以自身判斷為準。
+  </p>
+</div>
+{% endblock %}

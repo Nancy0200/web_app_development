@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}天命閣・探索命運的起點{% endblock %}
+{% block meta_description %}天命閣提供生辰八字排盤、線上占卜等傳統命理服務，讓您隨時隨地獲得命理指引與心靈慰藉。{% endblock %}
+
+{% block content %}
+<!-- 英雄區塊 -->
+<section class="hero" aria-label="天命閣主視覺">
+  <span class="hero-logo" aria-hidden="true">☯</span>
+  <h1 class="hero-title">天 命 閣</h1>
+  <p class="hero-subtitle">千年命理智慧・現代數位傳承</p>
+  <p class="hero-desc">探索您的生辰八字，聆聽古老籤詩的訴說。<br>每一個選擇，都是與命運的一次對話。</p>
+  <div class="hero-actions">
+    <a href="{{ url_for('bazi.bazi_form') }}" class="btn btn-gold" id="hero-bazi-btn">✦ 開始八字排盤</a>
+    <a href="{{ url_for('divination.divination_draw_page') }}" class="btn btn-outline" id="hero-divination-btn">🔮 進行線上占卜</a>
+  </div>
+</section>
+
+<!-- 服務卡片 -->
+<section aria-label="服務項目">
+  <div class="service-grid">
+    <a href="{{ url_for('bazi.bazi_form') }}" class="service-card bazi" id="service-bazi-card">
+      <span class="service-icon" aria-hidden="true">🀄</span>
+      <h2 class="service-title">生辰八字排盤</h2>
+      <p class="service-desc">輸入出生年月日時，系統將推算天干地支四柱，解析您的命格五行與先天性格。</p>
+    </a>
+    <a href="{{ url_for('divination.divination_draw_page') }}" class="service-card divination" id="service-divination-card">
+      <span class="service-icon" aria-hidden="true">🔮</span>
+      <h2 class="service-title">線上占卜抽籤</h2>
+      <p class="service-desc">心中默念您的疑惑，搖動籤筒，讓古老籤詩為您指引迷津，解答當下困惑。</p>
+    </a>
+  </div>
+</section>
+{% endblock %}

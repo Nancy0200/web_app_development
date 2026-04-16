@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}線上占卜・搖籤問卦 - 天命閣{% endblock %}
+{% block meta_description %}心中默想您的疑惑，搖動籤筒，讓古老籤詩為您指引迷津，解答感情、事業、財運等問題。{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+  <div class="divination-stage">
+    <div class="page-header">
+      <span class="page-header-icon" aria-hidden="true">🔮</span>
+      <h1 class="page-title">線上占卜</h1>
+      <p class="page-subtitle">靜心凝神，感受內心的呼喚</p>
+    </div>
+
+    <form id="divination-form" method="POST" action="{{ url_for('divination.divination_draw_action') }}">
+      <div class="form-group" style="margin-bottom:2rem;">
+        <label class="form-label" for="question">您心中的疑惑 <span style="color:var(--red-accent)">*</span></label>
+        <textarea class="form-control" id="question" name="question"
+          rows="3" maxlength="200"
+          placeholder="請在此寫下您心中的疑惑，例如：我的感情運勢如何？今年事業發展方向？"
+          style="resize:vertical;"></textarea>
+        <p class="form-hint">字數限制 200 字以內，請誠心填寫</p>
+      </div>
+
+      <!-- 籤筒圖示 -->
+      <div style="text-align:center;margin:1.5rem 0;">
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">填寫問題後，點擊籤筒或按下「抽籤」按鈕</p>
+        <div class="lot-container" onclick="shakeLot()" title="點擊搖籤" role="button" aria-label="點擊搖籤">
+          <div class="lot-bowl" id="lot-bowl">🪬</div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-gold btn-block" id="draw-btn" onclick="shakeLot()"
+        style="background:linear-gradient(135deg,#8e44ad,#6c3483);box-shadow:0 4px 15px var(--purple-glow);">
+        🔮 誠心搖籤
+      </button>
+    </form>
+
+    <p style="text-align:center;color:var(--text-muted);font-size:0.82rem;margin-top:2rem;">
+      ※ 占卜僅供心靈參考，命運掌握在自己手中，請以平常心看待結果。
+    </p>
+  </div>
+</div>
+{% endblock %}

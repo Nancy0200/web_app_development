@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}歷史紀錄・我的測算足跡 - 天命閣{% endblock %}
+{% block meta_description %}查看您在天命閣的所有八字排盤與占卜抽籤歷史紀錄。{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <span class="page-header-icon" aria-hidden="true">📖</span>
+    <h1 class="page-title">歷史紀錄</h1>
+    <p class="page-subtitle">您在天命閣的測算足跡</p>
+  </div>
+
+  <!-- 分頁切換 -->
+  <div class="history-tabs" role="tablist" aria-label="紀錄類型">
+    <button class="history-tab active" data-tab="bazi"
+      onclick="switchTab('bazi')" role="tab" aria-controls="panel-bazi" id="tab-bazi">
+      🀄 八字排盤（{{ bazi_records | length }}）
+    </button>
+    <button class="history-tab" data-tab="divination"
+      onclick="switchTab('divination')" role="tab" aria-controls="panel-divination" id="tab-divination">
+      🔮 占卜紀錄（{{ divination_records | length }}）
+    </button>
+  </div>
+
+  <!-- 八字紀錄 -->
+  <div id="panel-bazi" class="history-panel active" role="tabpanel" aria-labelledby="tab-bazi">
+    {% if bazi_records %}
+      {% for r in bazi_records %}
+      <a href="{{ url_for('bazi.bazi_result', record_id=r.id) }}"
+        class="history-item" id="bazi-record-{{ r.id }}">
+        <span class="history-item-icon" aria-hidden="true">🀄</span>
+        <div class="history-item-main">
+          <div class="history-item-title">
+            {{ r.bazi_result.gender_label }} ・ {{ r.birth_year }}/{{ r.birth_month }}/{{ r.birth_day }}
+            ・ 生肖{{ r.bazi_result.zodiac }}
+          </div>
+          <div class="history-item-sub">
+            四柱：{{ r.bazi_result.year_pillar.pillar }}・{{ r.bazi_result.month_pillar.pillar }}・{{ r.bazi_result.day_pillar.pillar }}・{{ r.bazi_result.hour_pillar.pillar }}
+            ／命主五行：{{ r.bazi_result.dominant_element }}
+            ／{{ r.created_at[:16] | replace('T', ' ') }}
+          </div>
+        </div>
+        <span class="history-item-arrow" aria-hidden="true">›</span>
+      </a>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <span class="empty-state-icon" aria-hidden="true">🌑</span>
+        <p>尚無八字排盤紀錄</p>
+        <a href="{{ url_for('bazi.bazi_form') }}" class="btn btn-outline" style="margin-top:1.5rem;" id="empty-bazi-btn">前往八字排盤</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- 占卜紀錄 -->
+  <div id="panel-divination" class="history-panel" role="tabpanel" aria-labelledby="tab-divination">
+    {% if divination_records %}
+      {% for r in divination_records %}
+      <a href="{{ url_for('divination.divination_result', record_id=r.id) }}"
+        class="history-item" id="divination-record-{{ r.id }}">
+        <span class="history-item-icon" aria-hidden="true">🔮</span>
+        <div class="history-item-main">
+          <div class="history-item-title">
+            {{ r.draw_result.luck_emoji }} {{ r.draw_result.name }}
+          </div>
+          <div class="history-item-sub">
+            疑惑：{{ r.question | truncate(40) }}
+            ／{{ r.created_at[:16] | replace('T', ' ') }}
+          </div>
+        </div>
+        <span class="history-item-arrow" aria-hidden="true">›</span>
+      </a>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <span class="empty-state-icon" aria-hidden="true">🌑</span>
+        <p>尚無占卜紀錄</p>
+        <a href="{{ url_for('divination.divination_draw_page') }}" class="btn btn-outline" style="margin-top:1.5rem;" id="empty-divination-btn">前往線上占卜</a>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

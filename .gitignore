@@ -1,0 +1,28 @@
+# Python / Flask
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# 虛擬環境
+.venv/
+venv/
+env/
+
+# 環境設定（含敏感資料）
+.env
+
+# SQLite 資料庫（執行期產生，不加入版本控制）
+instance/
+*.db
+*.sqlite3
+
+# 靜態資源快取
+*.pyc
+
+# 編輯器與 OS 產生的雜項檔案
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

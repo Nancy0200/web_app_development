@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% set lot = record['draw_result'] %}
+
+{% block title %}{{ lot.name }} - 占卜結果 - 天命閣{% endblock %}
+{% block meta_description %}占卜結果：{{ lot.name }}，{{ lot.luck }}。{{ lot.poem }}{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+  <div class="page-header">
+    <span class="page-header-icon" aria-hidden="true">🔮</span>
+    <h1 class="page-title">占卜結果</h1>
+    <p class="page-subtitle">您的疑惑：{{ record.question }}</p>
+  </div>
+
+  <!-- 籤詩結果卡片 -->
+  <div class="lot-result-card" role="main" aria-label="籤詩結果">
+    <div class="lot-number">第 {{ lot.number }} 籤</div>
+    <div class="lot-name">{{ lot.name }}</div>
+
+    <div class="lot-luck-badge luck-{{ lot.luck }}">
+      {{ lot.luck_emoji }} {{ lot.luck }}
+    </div>
+
+    <div class="lot-poem" aria-label="籤詩詩句">
+      「{{ lot.poem }}」
+    </div>
+
+    <div class="result-section">
+      <h2 class="result-section-title" style="color:var(--purple-accent);">✦ 籤詩解析</h2>
+      <p class="lot-interpretation">{{ lot.interpretation }}</p>
+    </div>
+
+    <div class="result-section">
+      <h2 class="result-section-title" style="color:var(--purple-accent);">💡 行動建議</h2>
+      <div class="lot-advice">{{ lot.advice }}</div>
+    </div>
+  </div>
+
+  <!-- 操作按鈕 -->
+  <div style="display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;justify-content:center;">
+    <a href="{{ url_for('divination.divination_draw_page') }}" class="btn btn-outline" id="draw-again-btn">🔮 再問一籤</a>
+    <a href="{{ url_for('bazi.bazi_form') }}" class="btn btn-outline" id="goto-bazi-btn">🀄 前往八字排盤</a>
+    <a href="{{ url_for('main.history') }}" class="btn btn-outline" id="goto-history-btn">📖 查看歷史紀錄</a>
+  </div>
+
+  <p style="text-align:center;color:var(--text-muted);font-size:0.82rem;margin-top:2rem;">
+    ※ 占卜結果以正向鼓勵為主，鼓勵您以積極心態面對人生課題。
+  </p>
+</div>
+{% endblock %}

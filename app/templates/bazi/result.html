@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% set result = record['bazi_result'] %}
+
+{% block title %}{{ result.birth_info.year }}年生・八字排盤結果 - 天命閣{% endblock %}
+{% block meta_description %}{{ result.gender_label }}，生於 {{ result.birth_info.year }} 年，生辰八字四柱：{{ result.year_pillar.pillar }}・{{ result.month_pillar.pillar }}・{{ result.day_pillar.pillar }}・{{ result.hour_pillar.pillar }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-header">
+    <span class="page-header-icon" aria-hidden="true">🀄</span>
+    <h1 class="page-title">八字排盤結果</h1>
+    <p class="page-subtitle">{{ result.gender_label }} ・ {{ result.birth_info.year }} 年 {{ result.birth_info.month }} 月 {{ result.birth_info.day }} 日
+      {% if result.birth_info.time is not none %} {{ result.birth_info.time }} 時{% endif %}
+      ・生肖{{ result.zodiac }}</p>
+  </div>
+
+  <!-- 四柱天干地支 -->
+  <section class="result-section" aria-label="四柱排盤">
+    <h2 class="result-section-title">☯ 生辰四柱</h2>
+    <div class="pillars-grid">
+      {% for pillar, label in [
+        (result.year_pillar, '年柱'),
+        (result.month_pillar, '月柱'),
+        (result.day_pillar, '日柱（命主）'),
+        (result.hour_pillar, '時柱')
+      ] %}
+      <div class="pillar-card">
+        <div class="pillar-label">{{ label }}</div>
+        <div class="pillar-chars" title="{{ pillar.stem }}（天干）・{{ pillar.branch }}（地支）">
+          {{ pillar.stem }}<br>{{ pillar.branch }}
+        </div>
+        <div class="pillar-element">{{ pillar.element }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- 五行統計 -->
+  <section class="result-section" aria-label="五行分析">
+    <h2 class="result-section-title">⚖ 五行統計</h2>
+    <div class="element-bar-grid">
+      {% set max_count = result.element_count.values() | max %}
+      {% for el in ['木', '火', '土', '金', '水'] %}
+      {% set count = result.element_count.get(el, 0) %}
+      {% set pct = (count / (max_count if max_count > 0 else 1) * 100) | int %}
+      <div class="element-bar-item">
+        <div class="element-bar-label">{{ el }}</div>
+        <div class="element-bar-track">
+          <div class="element-bar-fill el-{{ el }}" data-width="{{ pct }}%" style="width:0%"></div>
+        </div>
+        <div class="element-bar-count">{{ count }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- 命主五行與性格解析 -->
+  <section class="result-section" aria-label="命格解析">
+    <h2 class="result-section-title">✦ 命主五行・{{ result.dominant_element }}</h2>
+    <div class="personality-box">
+      {{ result.personality }}
+    </div>
+  </section>
+
+  <!-- 操作按鈕 -->
+  <div style="display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;">
+    <a href="{{ url_for('bazi.bazi_form') }}" class="btn btn-outline" id="bazi-again-btn">↩ 重新排盤</a>
+    <a href="{{ url_for('divination.divination_draw_page') }}" class="btn btn-outline" id="goto-divination-btn">🔮 前往占卜</a>
+    <a href="{{ url_for('main.history') }}" class="btn btn-outline" id="goto-history-btn">📖 查看歷史紀錄</a>
+  </div>
+
+  <p style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-top:2rem;">
+    ※ 本排盤結果依傳統五行理論計算，命理解析僅供心靈參考，實際選擇仍請自行判斷。
+  </p>
+</div>
+{% endblock %}
